@@ -1,0 +1,90 @@
+reporting-engine:
+  - "*"
+account-financial-reporting:
+  - "*"
+account-analytic:
+  - "*"
+account-invoicing:
+  - "*"
+account-invoice-reporting:
+  - "*"
+account-payment:
+  - "*"
+account-closing:
+  - "*"
+bank-payment:
+  - "*"
+pos:
+  - "*"
+bank-statement-reconcile:
+  - "*"
+bank-statement-import:
+  - "*"
+community-data-files:
+  - "*"
+contract:
+  - "*"
+crm:
+  - "*"
+credit-control:
+  - "*"
+currency:
+  - "*"
+edi:
+  - "*"
+l10n-spain:
+  - "*"
+margin-analysis:
+  - "*"
+mis-builder:
+  - "*"
+multi-company:
+  - "*"
+partner-contact:
+  - "*"
+product-attribute:
+  - "*"
+project:
+  - "*"
+purchase-workflow:
+  - "*"
+queue:
+  - "*"
+report-print-send:
+  - "*"
+sale-workflow:
+  - "*"
+server-ux:
+  - "*"
+server-tools:
+  - "*"
+server-brand:
+  - "*"
+social:
+  - "*"
+stock-logistics-workflow:
+  - "*"
+operating-unit:
+  - "*"
+stock-logistics-barcode:
+  - "*"
+stock-logistics-warehouse:
+  - "*"
+stock-logistics-reporting:
+  - "*"
+web:
+  - "*"
+account-financial-tools:
+  - "*"
+rma:
+  - "*"
+website:
+  - "*"
+e-commerce:
+  - "*"
+delivery-carrier:
+  - "*"
+account-fiscal-rule:
+  - "*"
+server-auth:
+  - "*"
