@@ -1,3 +1,5 @@
 git+https://github.com/OCA/openupgradelib.git@master
 unicodecsv
 unidecode
+ipdb
+odoo-test-helper
