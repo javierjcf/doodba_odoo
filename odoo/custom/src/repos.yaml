@@ -14,11 +14,12 @@
     - ocb $ODOO_VERSION
     # Example of a merge of the PR with the number <PR>
     # - oca refs/pull/<PR>/head
-  odoo_jcf_addons:
-    defaults:
-      depth: $DEPTH_MERGE
-    remotes:
-      origin: https://github.com/javierjcf/odoo_jcf_addons.git
-    target: origin $ODOO_VERSION
-    merges:
-      - origin $ODOO_VERSION
+
+odoo_jcf_addons:
+  defaults:
+    depth: $DEPTH_MERGE
+  remotes:
+    origin: https://github.com/javierjcf/odoo_jcf_addons.git
+  target: origin $ODOO_VERSION
+  merges:
+    - origin $ODOO_VERSION
