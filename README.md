@@ -19,11 +19,20 @@ invoke git-aggregate
 invoke start
 ```
 
+Al conectarse al puerto 14069 veremos el error `KeyError: 'ir.http'`
+Para ello parar
+
 **Parar**
 ```
 invoke stop
 ```
 
+Reiniciar la base de datos con la instalaciónm del módulo base
+```
+docker-compose run --rm odoo --stop-after-init -i base
+```
+
+Volver a arrancar
 
 ---
 [![Doodba deployment](https://img.shields.io/badge/deployment-doodba-informational)](https://github.com/Tecnativa/doodba)
