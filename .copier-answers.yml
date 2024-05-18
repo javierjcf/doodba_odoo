@@ -16,7 +16,7 @@ odoo_initial_lang: es_ES
 odoo_listdb: true
 odoo_oci_image: null
 odoo_proxy: other
-odoo_version: 16.0
+odoo_version: 17.0
 paths_without_crawlers:
 - /web
 - /website/info

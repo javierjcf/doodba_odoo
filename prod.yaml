@@ -18,10 +18,11 @@ services:
       - db
     networks:
       default:
+    # Publicamos en todas las interfaces de red
     ports:
-      - "0.0.0.0:16899:6899"
-      - "0.0.0.0:16069:8069"
-      - "0.0.0.0:16072:8072"
+      - "0.0.0.0:17899:6899"
+      - "0.0.0.0:17069:8069"
+      - "0.0.0.0:17072:8072"
     labels:
       doodba.domain.main: ""
 
