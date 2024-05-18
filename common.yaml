@@ -5,7 +5,7 @@ services:
     build:
       context: ./odoo
       args:
-        ODOO_VERSION: "16.0"
+        ODOO_VERSION: "15.0"
         UID: "${UID:-1000}"
         GID: "${GID:-1000}"
         # To aggregate in use `setup-devel.yaml`
