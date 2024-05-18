@@ -1,10 +1,47 @@
+# DOODBA ODOO 16
+
+## Despliegue entorno desarrollo
+
+**Descargar y construir imagen**
+
+
+```bash
+docker-compose -f devel.yaml build --pull --no-cache
+```
+
+**Descargar y construir imagen**
+```
+invoke git-aggregate
+```
+
+**Iniciar**
+```
+invoke start
+```
+
+Al conectarse al puerto 16069 veremos el error `KeyError: 'ir.http'`
+Para ello parar
+
+**Parar**
+```
+invoke stop
+```
+
+Reiniciar la base de datos con la instalaciónm del módulo base
+```
+docker-compose run --rm odoo --stop-after-init -i base
+```
+
+Volver a arrancar
+
+---
 [![Doodba deployment](https://img.shields.io/badge/deployment-doodba-informational)](https://github.com/Tecnativa/doodba)
 [![Last template update](https://img.shields.io/badge/last%20template%20update-v3.3.3-informational)](https://github.com/Tecnativa/doodba-copier-template/tree/v3.3.3)
-[![Odoo](https://img.shields.io/badge/odoo-v16.0-a3478a)](https://github.com/odoo/odoo/tree/16.0)
+[![Odoo](https://img.shields.io/badge/odoo-v14.0-a3478a)](https://github.com/odoo/odoo/tree/16.0)
 [![AGPL-3.0-or-later license](https://img.shields.io/badge/license-AGPL--3.0--or--later-success})](LICENSE)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 
-# jcfodoo16 - a Doodba deployment
+# doodba_odoo16 - a Doodba deployment
 
 This project is a Doodba scaffolding. Check upstream docs on the matter:
 
@@ -20,3 +57,4 @@ This project is maintained by:
 
 Also, special thanks to
 [our dear community contributors](https://github.com/Tecnativa/doodba-copier-template/graphs/contributors).
+
