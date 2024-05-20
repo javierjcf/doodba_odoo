@@ -88,3 +88,5 @@ account-fiscal-rule:
   - "*"
 server-auth:
   - "*"
+odoo_jcf_addons:
+  - "*"
