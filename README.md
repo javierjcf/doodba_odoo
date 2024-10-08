@@ -1,4 +1,4 @@
-# DOODBA ODOO 17
+# DOODBA ODOO 18
 
 ## Despliegue entorno desarrollo
 
@@ -19,7 +19,7 @@ invoke git-aggregate
 invoke start
 ```
 
-Al conectarse al puerto 17069 veremos el error `KeyError: 'ir.http'`
+Al conectarse al puerto 18069 veremos el error `KeyError: 'ir.http'`
 Para ello parar
 
 **Parar**
@@ -41,7 +41,7 @@ Volver a arrancar
 [![AGPL-3.0-or-later license](https://img.shields.io/badge/license-AGPL--3.0--or--later-success})](LICENSE)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 
-# doodba_odoo16 - a Doodba deployment
+# doodba_odoo18 - a Doodba deployment
 
 This project is a Doodba scaffolding. Check upstream docs on the matter:
 
