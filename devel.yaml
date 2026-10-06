@@ -1,0 +1,133 @@
+services:
+  odoo_proxy:
+    image: ghcr.io/tecnativa/docker-whitelist:latest
+    depends_on:
+      - odoo
+    networks: &public
+      default:
+      public:
+    ports:
+      - "127.0.0.1:${PORT_PREFIX:-20}899:6899"
+      - "127.0.0.1:${PORT_PREFIX:-20}069:8069"
+      - "127.0.0.1:${PORT_PREFIX:-20}072:8072"
+    environment:
+      PORT: "6899 8069 8072"
+      TARGET: gatekeeper
+
+  odoo:
+    extends:
+      file: common.yaml
+      service: odoo
+    build:
+      args:
+        # To aggregate in development, run the devel-setup service
+        AGGREGATE: "false"
+        # Export these variables to own files created by odoo in your filesystem
+        UID: "${UID:-1000}"
+        GID: "${GID:-1000}"
+    stdin_open: true
+    tty: true
+    environment:
+      DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-devel}"
+      INITIAL_LANG: "es_ES"
+      LIST_DB: "true"
+      DEBUGPY_ENABLE: "${DOODBA_DEBUGPY_ENABLE:-0}"
+      PGDATABASE: &dbname devel
+      PYDEVD_RESOLVE_SYMLINKS: 1
+      PYTHONDONTWRITEBYTECODE: 1
+      PYTHONOPTIMIZE: ""
+      PYTHONPATH: /opt/odoo/custom/src/odoo
+      SMTP_PORT: "1025"
+      WDB_SOCKET_SERVER: "wdb_internal"
+      WDB_WEB_PORT: "${PORT_PREFIX:-20}984"
+      # To avoid installing demo data export DOODBA_WITHOUT_DEMO=all
+      WITHOUT_DEMO: "${DOODBA_WITHOUT_DEMO-false}"
+    depends_on:
+      db:
+        condition: service_healthy
+      smtp:
+        condition: service_started
+      wdb:
+        condition: service_started
+      gatekeeper:
+        condition: service_healthy
+    network_mode: service:gatekeeper
+    command:
+      - odoo
+      - --limit-memory-soft=0
+      - --limit-time-real-cron=9999999
+      - --limit-time-real=9999999
+      - --workers=0
+      - --dev=reload,qweb,werkzeug,xml,access
+  devel-setup:
+    profiles: ["devel-setup"]
+    extends: odoo
+    entrypoint: autoaggregate
+    network_mode: host
+    environment:
+      DEPTH_DEFAULT: 100
+      # XXX Export these variables before running setup to own the files
+      UID: "${DOODBA_GITAGGREGATE_UID:-1000}"
+      GID: "${DOODBA_GITAGGREGATE_GID:-1000}"
+      UMASK: "$DOODBA_UMASK"
+    depends_on: !override []
+    user: root
+    volumes: !override
+      - ./odoo/custom/src:/opt/odoo/custom/src:rw,z
+  gatekeeper:
+    extends:
+      file: common.yaml
+      service: gatekeeper
+    environment:
+      REFRESH_INTERVAL: 300
+      ALLOWED_HOSTS: >-
+        cdnjs.cloudflare.com fonts.googleapis.com fonts.gstatic.com www.google.com www.googleapis.com www.gravatar.com
+    networks:
+      default:
+      public:
+  db:
+    extends:
+      file: common.yaml
+      service: db
+    environment:
+      POSTGRES_DB: *dbname
+      POSTGRES_PASSWORD: odoopassword
+
+  pgweb:
+    image: docker.io/sosedoff/pgweb
+    networks: *public
+    ports:
+      - "127.0.0.1:${PORT_PREFIX:-20}081:8081"
+    environment:
+      PGWEB_DATABASE_URL: postgres://odoo:odoopassword@db:5432/devel?sslmode=disable
+    depends_on:
+      db:
+        condition: service_healthy
+
+  smtp:
+    extends:
+      file: common.yaml
+      service: smtpfake
+    networks: *public
+    ports:
+      - "127.0.0.1:${PORT_PREFIX:-20}025:8025"
+
+  wdb:
+    image: docker.io/kozea/wdb
+    networks:
+      default:
+        aliases:
+          - wdb_internal
+      public:
+    ports:
+      - "127.0.0.1:${PORT_PREFIX:-20}984:1984"
+    # HACK https://github.com/Kozea/wdb/issues/136
+    init: true
+networks:
+  default:
+    internal: ${DOODBA_NETWORK_INTERNAL-true}
+  public:
+
+volumes:
+  filestore:
+  db:

@@ -1,0 +1,52 @@
+services:
+  odoo:
+    build:
+      context: ./odoo
+      args:
+        DB_VERSION: "18"
+        ODOO_VERSION: "20.0"
+        UID: "${UID:-1000}"
+        GID: "${GID:-1000}"
+        GITHUB_TOKEN: "${DOODBA_GITHUB_TOKEN:-}"
+        # To aggregate use the `devel-setup` (devel.yaml) or `prod-setup` (prod.yaml) services
+        AGGREGATE: "false"
+        PIP_INSTALL_ODOO: "false"
+        CLEAN: "false"
+        COMPILE: "false"
+    environment:
+      EMAIL_FROM: ""
+      PGDATABASE: &dbname prod
+      PGUSER: &dbuser "odoo"
+      PROXY_MODE: "true"
+      GITHUB_TOKEN: "${DOODBA_GITHUB_TOKEN:-}"
+      PYTHONPATH: /opt/odoo/custom/src/odoo
+    tty: true
+    volumes:
+      - filestore:/var/lib/odoo
+      - ./odoo/custom:/opt/odoo/custom:ro,z
+      - ./odoo/auto:/opt/odoo/auto:rw,z
+  gatekeeper:
+    image: ghcr.io/tecnativa/egress-gatekeeper:latest
+    cap_add:
+      - NET_ADMIN
+  db:
+    image: ghcr.io/tecnativa/postgres-autoconf:18-alpine
+    shm_size: 4gb
+    environment:
+      POSTGRES_DB: *dbname
+      POSTGRES_USER: *dbuser
+      PGDATA: "/var/lib/postgresql/data"
+      CONF_EXTRA: |
+        work_mem = 512MB
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+      start_interval: 1s
+
+  smtpfake:
+    image: docker.io/mailhog/mailhog

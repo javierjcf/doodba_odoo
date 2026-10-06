@@ -1,0 +1,62 @@
+services:
+  odoo:
+    extends:
+      file: common.yaml
+      service: odoo
+    restart: unless-stopped
+    env_file:
+      - .docker/odoo.env
+      - .docker/db-access.env
+    environment:
+      DB_FILTER: "^prod"
+      DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-prod}"
+      INITIAL_LANG: "es_ES"
+      LIST_DB: "false"
+      ODOO_BUS_PUBLIC_SAMESITE_WS: 1
+      PGHOST: doodba-20-20-0-prod-db
+    depends_on:
+      - db
+    networks:
+      default:
+    labels:
+      doodba.domain.main: ""
+
+  # Descarga el código de repos.yaml al volumen ./odoo/custom/src sin reconstruir la imagen:
+  #   docker compose -f prod.yaml run --rm prod-setup
+  prod-setup:
+    profiles: ["prod-setup"]
+    extends:
+      file: common.yaml
+      service: odoo
+    entrypoint: autoaggregate
+    user: root
+    environment:
+      DEPTH_DEFAULT: 100
+      UID: "${DOODBA_GITAGGREGATE_UID:-1000}"
+      GID: "${DOODBA_GITAGGREGATE_GID:-1000}"
+      UMASK: "$DOODBA_UMASK"
+    volumes: !override
+      - ./odoo/custom/src:/opt/odoo/custom/src:rw,z
+
+  db:
+    extends:
+      file: common.yaml
+      service: db
+    environment:
+      DB_HOST: doodba-20-20-0-prod-db
+    env_file:
+      - .docker/db-creation.env
+    restart: unless-stopped
+    networks:
+      default:
+        aliases:
+          - "doodba-20-20-0-prod-db"
+
+networks:
+  default:
+    driver_opts:
+      encrypted: 1
+
+volumes:
+  filestore:
+  db:
