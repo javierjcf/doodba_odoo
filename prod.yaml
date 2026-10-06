@@ -8,9 +8,9 @@ services:
       - .docker/odoo.env
       - .docker/db-access.env
     ports:
-      - "127.0.0.1:20069:6899"
-      - "127.0.0.1:20169:8069"
-      - "127.0.0.1:20172:8072"
+      - "127.0.0.1:20069:8069"
+      - "127.0.0.1:20899:6899"
+      - "127.0.0.1:20072:8072"
     environment:
       DB_FILTER: "^prod"
       DOODBA_ENVIRONMENT: "${DOODBA_ENVIRONMENT-prod}"
